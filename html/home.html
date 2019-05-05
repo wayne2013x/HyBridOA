@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>底部导航</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        header {
+            background-color: #f2f2f2;
+        }
+
+        header ul li {
+            height: 40px;
+            line-height: 40px;
+            text-align: left;
+            margin-left: .67rem;
+            display: none;
+            position: relative;
+            font-size: 14px;
+        }
+
+        header ul li.active {
+            display: block;
+        }
+
+        #footer {
+            background-color: #f2f2f2;
+        }
+
+        #footer ul li {
+            padding-top: 2.3rem;
+            padding-bottom: 2px;
+            background: url() no-repeat center 2px;
+            background-size: auto 28px;
+            text-align: center;
+            color: #bfbfbf;
+            font-size: 11px
+        }
+
+        #footer ul li.active {
+            color: #1296db;
+        }
+
+        #footer ul li:nth-child(1) {
+            background-image: url(../image/memu_line.png);
+        }
+
+        #footer ul li:nth-child(2) {
+            background-image: url(../image/list.png);
+        }
+
+        #footer ul li:nth-child(3) {
+            background-image: url(../image/contact-line.png);
+        }
+
+        #footer ul li:nth-child(4) {
+            background-image: url(../image/user-line.png);
+        }
+
+        #footer ul li:nth-child(1).active {
+            background-image: url(../image/menu_fill.png);
+        }
+
+        #footer ul li:nth-child(2).active {
+            background-image: url(../image/listed.png);
+        }
+
+        #footer ul li:nth-child(3).active {
+            background-image: url(../image/contact_fill.png);
+        }
+
+        #footer ul li:nth-child(4).active {
+            background-image: url(../image/user-fill.png);
+        }
+
+        .flex-con {
+            overflow: auto
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header>
+            <ul>
+                <li class="border-b active">HyBirdOA</li>
+                <li class="border-b">待办</li>
+                <li class="border-b">通讯录</li>
+                <li class="border-b">个人信息</li>
+            </ul>
+        </header>
+        <div id="main" class="flex-con">
+
+        </div>
+        <div id="footer" class="border-t">
+            <ul class="flex-wrap">
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active">首页</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">待办</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">通讯录</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">我的</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    var dialogBox;
+    apiready = function() {
+        dialogBox = api.require('dialogBox');
+        $api.fixStatusBar($api.dom('header'));
+        api.setStatusBarStyle({
+            style: 'dark',
+            color: '#f2f2f2'
+        });
+        funIniGroup();
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+
+            api.closeWidget({
+                //silent: true
+            });
+        });
+        api.addEventListener({
+            name: 'offline'
+        }, function(ret, err) {
+          dialogBox.alert({
+              texts: {
+                  title: '提示',
+                  content: '断网了...',
+              },
+              tapClose:true,
+              styles: {
+                  bg: '#fff',
+                  w: 300,
+                  corner: 2,
+                  title: {
+                      marginT: 20,
+                      icon: 'widget://image/error.png',
+                      iconSize: 40,
+                      titleSize: 14,
+                      titleColor: '#000'
+                  },
+                  content: {
+                      color: '#000',
+                      size: 14
+                  }
+              }
+          }, function(ret) {
+              // if (ret.eventType == 'right') {
+              //     dialogBox.close({
+              //         dialogName: 'alert'
+              //     });
+              // }
+          });
+
+        });
+
+    }
+
+    function funIniGroup() {
+        var eHeaderLis = $api.domAll('header li'),
+            frames = [];
+        for (var i = 0, len = eHeaderLis.length; i < len; i++) {
+            frames.push({
+                name: 'page' + i,
+                url: 'page' + i + '.html',
+                bgColor: 'rgba(0,0,0,.2)',
+                bounces: true
+            })
+        }
+        api.openFrameGroup({
+            name: 'group',
+            scrollEnabled: false,
+            rect: {
+                x: 0,
+                y: $api.dom('header').offsetHeight,
+                w: api.winWidth,
+                h: $api.dom('#main').offsetHeight
+            },
+            index: 0,
+            frames: frames
+        }, function(ret, err) {
+
+        });
+    }
+
+    // 随意切换按钮
+    function randomSwitchBtn(tag) {
+        if (tag == $api.dom('#footer li.active')) return;
+        var eFootLis = $api.domAll('#footer li'),
+            eHeaderLis = $api.domAll('header li'),
+            index = 0;
+        for (var i = 0, len = eFootLis.length; i < len; i++) {
+            if (tag == eFootLis[i]) {
+                index = i;
+            } else {
+                $api.removeCls(eFootLis[i], 'active');
+                $api.removeCls(eHeaderLis[i], 'active');
+            }
+        }
+        $api.addCls(eFootLis[index], 'active');
+        $api.addCls(eHeaderLis[index], 'active');
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: index
+        });
+    }
+</script>

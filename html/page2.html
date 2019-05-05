@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<title>title</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<style>
+		body {}
+
+		button {
+			font-size: 15px;
+			width: 45%;
+			height: 30px;
+			border: 2px solid #008000;
+			border-radius: 4px;
+			background-color: #fff;
+			color: #008000;
+			margin-left: 5px;
+			margin-bottom: 5px;
+		}
+
+		button:hover {
+			color: #fff;
+			background-color: #008000;
+			border: 2px solid #fff;
+		}
+	</style>
+
+</head>
+<body>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+	apiready = function() {
+		var UIListCard = api.require('UIListCard');
+		UIListCard.open({
+			rect: {
+				x: 0,
+				y: 0,
+				w: api.frameWidth,
+				h: api.frameHeight
+			},
+			styles: {
+				backgroudColor: 'rgba(0,0,0,0)', // (可选项) 模块的背景颜色，默认：'rgba(0,0,0,0)'
+				sectionTitle: { //（可选项）JSON对象；标题的样式
+					bgColor: '#f2f2f2', //（可选项）字符串类型；标题的背景色，支持 rgb、rgba、#；默认：'#EEEEEE'
+					color: '#000', //（可选项）字符串类型；标题文字颜色，支持 rgb、rgba、#；默认：'#000000'
+					size: 12, //（可选项）数字类型；标题文字大小；默认：12.0
+					height: 30 //（可选项）数字类型；区域标题的高度，默认：25.0
+				},
+				item: { //（可选项）JSON对象；列表项的样式
+					bgColor: '#fff', //（可选项）字符串类型；列表项的背景色，支持 rgb、rgba、#；默认：'#FFFFFF'
+					activeBgColor: '#f2f2f2', //（可选项）字符串类型；列表项按下时的背景色，支持 rgb、rgba、#；默认：'#696969'
+					color: '#000', //（可选项）字符串类型；列表项的文字颜色，支持 rgb、rgba、#，默认：'#000000'
+					size: 14, //（可选项）数字类型；列表项的文字大小，默认：14.0
+					height: 40, //（可选项）数字类型；列表项的高度，默认：40.0
+					customerColor: '#515151', // (可选项)字符串类型；条目类型的文字颜色
+					customerSize: 11  //（可选项）数字类型；条目类型的文字的大小
+				}
+			},
+			contacts: [{
+				"employee_id": 191,
+				"name": "Doyle",
+				"customerTypes": "人力资源部/人事主管",
+				"dept": "人力资源部",
+				"position":"人事主管",
+				"wechat":"223344213",
+				"qq":"223344213",
+				"email":"doyle@163.com",
+				"isdeleted": "N",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13366148872",
+					"type": "1"
+				}]
+			}, {
+				"employee_id": 192,
+				"name": "Donald",
+				"customerTypes": "行政管理部/总经理",
+				"dept": "行政管理部",
+				"position":"总经理",
+				"wechat":"332255213",
+				"qq":"332255213",
+				"email":"donald@163.com",
+				"isdeleted": "N",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13366148872",
+					"type": "1"
+				}]
+			}, {
+				"employee_id": 193,
+				"name": "Wayne",
+				"customerTypes": "互联网事业部/开发工程师",
+				"dept": "互联网事业部",
+				"position":"开发工程师",
+				"wechat":"summer0101",
+				"qq":"58584321",
+				"email":"summer@163.com",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13900139000",
+					"type": "1"
+				}]
+			}, {
+				"employee_id": 194,
+				"name": "Murph",
+				"customerTypes": "物联网事业部/开发工程师",
+				"dept": "物联网事业部",
+				"position":"开发工程师",
+				"wechat":"murph0101",
+				"qq":"68683321",
+				"email":"murph@163.com",
+				"isdeleted": "N",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13366148872",
+					"type": "1"
+				}]
+
+			}, {
+				"employee_id": 195,
+				"name": "Cooper",
+				"customerTypes": "ERP事业部/测试工程师",
+				"dept": "ERP事业部",
+				"position":"测试工程师",
+				"wechat":"cooper0101",
+				"qq":"28283321",
+				"email":"cooper@163.com",
+				"isdeleted": "N",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13366148872",
+					"type": "1"
+				}]
+
+			}, {
+				"employee_id": 196,
+				"name": "Brand",
+				"customerTypes": "CRM事业部/产品经理",
+				"dept": "CRM事业部",
+				"position":"产品经理",
+				"wechat":"Brand0101",
+				"qq":"38383321",
+				"email":"brand@163.com",
+				"isdeleted": "N",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13366148872",
+					"type": "1"
+				}]
+
+			}],
+			fixedOn: api.frameName
+		}, function(ret) {
+			if (ret) {
+				//alert(JSON.stringify(ret.contact));
+				if (ret.eventType == 'click') {
+						api.openWin({
+							name: 'userDetail',
+							url: 'contact/userwin.html',
+							bounces: false,
+							pageParam: ret.contact
+						});
+				}
+			}
+		});
+
+
+	};
+
+	function fnreloadData() {
+		var UIListCard = api.require('UIListCard');
+		UIListCard.reloadData({
+			contacts: [{
+				"employee_id": 191,
+				"name": "A珍",
+				"customerTypes": "人力资源部/人事主管",
+				"dept_id": "002000",
+				"isdeleted": "N",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13366148872",
+					"type": "1"
+				}]
+			}, {
+				"employee_id": 192,
+				"name": "A强",
+				"customerTypes": "行政管理部/总经理",
+				"dept_id": "002000",
+				"isdeleted": "N",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13366148872",
+					"type": "1"
+				}]
+			}, {
+				"employee_id": 193,
+				"name": "Summer",
+				"customerTypes": "互联网事业部/开发工程师",
+				"dept_id": "002000",
+				"isdeleted": "N",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13366148872",
+					"type": "1"
+				}]
+			}, {
+				"employee_id": 194,
+				"name": "测试用户A",
+				"customerTypes": "测试部门A/测试职位A",
+				"dept_id": "002000",
+				"isdeleted": "N",
+				"tags": "",
+				"isremark": 1,
+				"phones": [{
+					"phone": "13366148872",
+					"type": "1"
+				}]
+			}],
+		});
+
+	}
+</script>
+
+</html>

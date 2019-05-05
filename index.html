@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>底部导航</title>
+</head>
+<body>
+</body>
+</html>
+<script type="text/javascript" src="./script/api.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+      // api.openWin({
+      //     name: 'home',
+      //     url: 'html/home.html'
+      // });
+
+
+      if ($api.getStorage('UserId')) {
+        api.openWin({
+            name: 'home',
+            url: 'html/home.html',
+            slidBackEnabled: false
+        });
+      }
+      else {
+        api.openWin({
+            name: 'login',
+            url: 'html/login.html'
+        });
+      }
+    }
+
+</script>

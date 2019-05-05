@@ -1,0 +1,600 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>通知</title>
+    <link rel="stylesheet" type="text/css" href="../css/fonts/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../css/ydui.css" />
+    <link href="../css/suosou/iconfont.css" rel="stylesheet" />
+    <link href="../css/date/iconfont.css" rel="stylesheet" />
+
+        <script type="text/javascript" src="../script/jquery-1.9.1.min.js"></script>
+      <script type="text/javascript" src="../script/ydui.flexible.js"></script>
+    <script type="text/javascript" src="../script/api.js"></script>
+
+
+
+</head>
+<style>
+.db_flex_start {
+    display: flex;
+    justify-content: flex-start;
+    margin: 5px 0 1px 15px;
+}
+.db_form_List_sea {
+    float: left;
+    display: block;
+    padding: 9px 15px;
+    width: 100px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+}
+.db_sku_search {
+    background: white;
+    position: relative;
+    min-height: 20px;
+    margin-bottom: 3px;
+}
+.db_input_sku {
+    width: 84%;
+    height: 20px;
+    line-height: 20px;
+    width: 240px;
+    outline: none;
+    border: none;
+    margin: 10px 9px;
+    background: white;
+}
+.db_button_search {
+    border: none;
+    outline: none;
+    color: #ccc;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+    border-radius: 3px;
+    margin-top: 6px;
+    margin-left: 10px;
+}
+</style>
+
+<body style="padding-top:0px;">
+  <!-- <div class="db_flex_start ">
+        <div class="db_sku_search  " style="width: 8rem;border-radius: 6px;">
+            <input type="text"  placeholder=" 请输入关键字查询" id="selname" onclick="$(this).val(' ');" class="db_input_sku" />
+        </div>
+        <button class="db_button_search" onclick="display()"><i class="iconfont_ss icn-sousuo"></i></button>
+        <button style="position: relative;left: 7px;border:none;z-index:1;" onclick="test()"><i class="iconfont_date icn-riqi"></i></button>
+        <input id="seldate" style="height: 38px;white-space: nowrapbackground:#f5f5f5;color:#f5f5f5; width: 28px;position:relative;left:-20px;border:none;z-index:10" type="date" onchange="display()"  />
+    </div> -->
+  <div id="J_Tab" class="m-tab">
+    <ul class="tab-nav" style="">
+        <!-- <li class="tab-nav-item tab-active" onclick="loadalldata($('#selname').val(),$('#seldate').val())"><a href="javascript:;">全部</a></li> -->
+        <li class="tab-nav-item tab-active" onclick="loadrcdata($('#selname').val(),$('#seldate').val())"><a href="javascript:;">日程</a></li>
+        <li class="tab-nav-item" onclick="loadrwdata('nofinished',$('#selname').val(),$('#seldate').val())"><a href="javascript:;">任务</a></li>
+        <li class="tab-nav-item" onclick="loadhydata('',$('#selname').val(),$('#seldate').val())"><a href="javascript:;">会议</a></li>
+        <!-- <li class="tab-nav-item" onclick="loadggdata($('#selname').val(),$('#seldate').val())"><a href="javascript:;">公告</a></li> -->
+    </ul>
+    <div style="background-color:#F5F5F5;" class="tab-panel">
+        <!--<div id="all" class="tab-panel-item tab-active" style="padding:0;">
+          <div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openNoticeDetailWin('0');">
+            <i class="icon iconfont icn-notice" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">测试公告</span><br/><span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">2018-09-09 00:00</span>
+          </div>
+            <div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openMeetingDetailWin('0');">
+              <i class="icon iconfont icn-huiyi3" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">测试会议</span><br/><span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">2018-01-09 00:00</span>
+            </div>
+            <div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openTaskDetailWin('0');">
+              <i class="icon iconfont icn-renwu1" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">测试任务</span><br/><span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">2018-02-09 00:00</span>
+            </div>
+            <div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openScheduleDetailWin('0');">
+              <i class="icon iconfont icn-tixing1" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">测试日程</span><br/><span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">2018-03-09 00:00</span>
+            </div>
+        </div>-->
+        <div id="richeng" class="tab-panel-item tab-active" style="padding:0;">
+          <!--<div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;">
+            <i class="icon iconfont icn-tixing1" style="font-size:0.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: .33rem;">测试日程</span><br/><span style="margin:.33rem 0rem 0rem .8rem;display:inline-block;color:#bfbfbf;font-size: .3rem;">2018-03-09 00:00</span>
+          </div> -->
+        </div>
+        <div class="tab-panel-item" style="padding:0;">
+          <button style="margin:0;font-size:.3rem;color:#3395FB;height:.85rem;line-height:.85rem;" id="TaskShowSheet" type="button" class="btn-block btn-hollow">待完成 <i style="font-size: .26rem;" class="icon-type"></i></button>
+        <div id="renwu" >
+        <!--  <div style="background: #fff;padding: .32rem .34rem;margin-bottom:0.2rem;">
+            <i class="icon iconfont icn-renwu1" style="font-size:0.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: .33rem;">测试任务</span><br/><span style="margin:.33rem 0rem 0rem .8rem;display:inline-block;color:#bfbfbf;font-size: .3rem;">2018-02-09 00:00</span>
+          </div> -->
+        </div>
+        </div>
+        <div class="tab-panel-item" style="padding:0;">
+          <button style="margin:0;font-size:.3rem;color:#3395FB;height:.85rem;line-height:.85rem;" id="MeetingShowSheet" type="button" class="btn-block btn-hollow">全部
+            <i style="font-size: .26rem;" class="icon-type"></i></button>
+        <div id="huiyi">
+          <!--<div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;">
+            <i class="icon iconfont icn-huiyi3" style="font-size:0.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: .33rem;">测试会议</span><br/><span style="margin:.33rem 0rem 0rem .8rem;display:inline-block;color:#bfbfbf;font-size: .3rem;">2018-01-09 00:00</span>
+          </div> -->
+        </div>
+        </div>
+        <!--  <div id="gonggao" class="tab-panel-item" style="padding:0;">
+        <div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;">
+            <i class="icon iconfont icn-notice" style="font-size:0.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: .33rem;">测试公告</span><br/><span style="margin:.33rem 0rem 0rem .8rem;display:inline-block;color:#bfbfbf;font-size: .3rem;">2018-09-09 00:00</span>
+          </div>
+        </div> -->
+    </div>
+  </div>
+  <div class="m-actionsheet" id="TaskSheet">
+      <a id="dai_wan_cheng" href="#" class="actionsheet-item">待完成</a>
+      <a id="yi_wan_cheng" href="#" class="actionsheet-item">已完成</a>
+      <a href="javascript:;" class="actionsheet-action" id="TaskCancel">取消</a>
+  </div>
+  <div class="m-actionsheet" id="MeetingSheet">
+      <a id="quan_bu" href="#" class="actionsheet-item">全部</a>
+      <a id="wei_kai_shi" href="#" class="actionsheet-item">未开始</a>
+      <a id="yi_jie_shu" href="#" class="actionsheet-item">已结束</a>
+      <a href="javascript:;" class="actionsheet-action" id="MeetingCancel">取消</a>
+  </div>
+
+  <script type="text/javascript" src="../script/ydui.js"></script>
+  <script>
+  var skip = 1;		//页码
+  var userid="";
+    apiready = function () {
+      userid=$api.getStorage('UserId');
+        //loadalldata($("#selname").val(),$('#seldate').val());
+        loadrcdata($("#selname").val(),$('#seldate').val());
+        api.setCustomRefreshHeaderInfo({
+          bgColor : '#ffffff',
+          image : {
+            pull : ['widget://image/1.png', 'widget://image/2.png', 'widget://image/3.png', 'widget://image/4.png', 'widget://image/5.png', 'widget://image/6.png', 'widget://image/7.png', 'widget://image/8.png'],
+            load : ['widget://image/8.png', 'widget://image/7.png', 'widget://image/6.png', 'widget://image/5.png', 'widget://image/4.png', 'widget://image/3.png', 'widget://image/2.png', 'widget://image/1.png']
+          }
+        }, function() {
+            skip = 1;
+            $('#seldate').val('');
+            loadalldata($("#selname").val(),$('#seldate').val());
+          setTimeout(function() {
+            api.refreshHeaderLoadDone();
+          }, 1000)
+        });
+        fnInitEvent();
+      }
+
+      function fnInitEvent(){
+        /**上拉加载 */
+        api.addEventListener({
+          name:'scrolltobottom',
+          extra:{
+              threshold:10
+          }
+      }, function(ret, err){
+        //页码+1，继续请求数据
+        skip+=1;
+        loadalldata($("#selname").val(),$('#seldate').val());
+        loadrcdata($("#selname").val(),$('#seldate').val());
+        loadrwdata('nofinished',$("#selname").val(),$('#seldate').val());
+        loadhydata('',$("#selname").val(),$('#seldate').val());
+        loadggdata($("#selname").val(),$('#seldate').val());
+      });
+    }
+
+
+
+    var $tab = $('#J_Tab');
+
+    $tab.tab({
+        nav: '.tab-nav-item',
+        panel: '.tab-panel-item',
+        activeClass: 'tab-active',
+        skip:1
+    });
+
+    var $Task = $('#TaskSheet');
+
+    $('#TaskShowSheet').on('click', function () {
+        $Task.actionSheet('open');
+    });
+
+    //取消
+    $('#TaskCancel').on('click', function () {
+        $Task.actionSheet('close');
+    });
+
+    //待完成
+    $('#dai_wan_cheng').on('click', function () {
+        $Task.actionSheet('close');
+        $('#TaskShowSheet').html('待完成 <i style="font-size: .26rem;" class="icon-type"></i>');
+        loadrwdata('nofinished',$("#selname").val(),$('#seldate').val());
+    });
+
+    //已完成
+    $('#yi_wan_cheng').on('click', function () {
+        $Task.actionSheet('close');
+
+        loadrwdata('finished',$("#selname").val(),$('#seldate').val());
+          $('#TaskShowSheet').html('已完成 <i style="font-size: .26rem;" class="icon-type"></i>');
+    });
+
+    var $Meeting = $('#MeetingSheet');
+
+    $('#MeetingShowSheet').on('click', function () {
+        $Meeting.actionSheet('open');
+    });
+
+    //取消
+    $('#MeetingCancel').on('click', function () {
+        $Meeting.actionSheet('close');
+    });
+
+    //全部
+    $('#quan_bu').on('click', function () {
+        $Meeting.actionSheet('close');
+        $('#MeetingShowSheet').html('全部 <i style="font-size: .26rem;" class="icon-type"></i>');
+        loadhydata('',$("#selname").val(),$('#seldate').val());
+    });
+
+    //未开始
+    $('#wei_kai_shi').on('click', function () {
+        $Meeting.actionSheet('close');
+        loadhydata('nofinished',$("#selname").val(),$('#seldate').val());
+        $('#MeetingShowSheet').html('未开始 <i style="font-size: .26rem;" class="icon-type"></i>');
+    });
+
+    //已结束
+    $('#yi_jie_shu').on('click', function () {
+        $Meeting.actionSheet('close');
+        loadhydata('finished',$("#selname").val(),$('#seldate').val());
+        $('#MeetingShowSheet').html('已结束 <i style="font-size: .26rem;" class="icon-type"></i>');
+    });
+
+    //打开通知
+    function openNoticeDetailWin(id)
+    {
+      api.openWin({
+          name: 'noticedetail',
+          url: 'notice/detail.html',
+          pageParam: {
+              selid: id
+          }
+      });
+    }
+
+    //打开会议
+    function openMeetDetailWin(id)
+    {
+      api.openWin({
+          name: 'meetingdetail',
+          url: 'meeting/detail.html',
+          pageParam: {
+              selid: id
+          }
+      });
+    }
+
+    //打开日程
+    function openScheduleDetailWin(id)
+    {
+      api.openWin({
+          name: 'taskedit',
+          url: 'task/taskedit.html',
+          pageParam: {
+              taskid: id,
+              userid:userid
+          }
+      });
+    }
+
+    //打开任务
+    function OPenTaskDetailWin(id,taskState)
+ {      var url1 = (taskState =="已完成")? 'task/detail.html':'task/taskedit.html';
+      api.openWin({
+          name: 'taskdetail',
+          url: url1,
+          pageParam: {
+              taskid: id,
+              userid:userid
+          }
+      });
+    }
+
+    //打开提醒
+    function OPenRemindDetailWin(id)
+    {
+      //var url1 = (taskState =="已完成")? 'task/detail.html':'task/taskedit.html';
+      api.openWin({
+          name: 'taskdetail',
+          url: 'task/remind.html',
+          pageParam: {
+              taskid: id,
+              userid:userid
+          }
+      });
+    }
+
+
+ function loadalldata(selname,seldate) {      // 加载loading
+      // api.showProgress({
+      // title:"P2获取数据中...",
+      // text: '请稍等...'
+      //   });
+     api.ajax({
+          url: ServerConfig.web + '/InformApi.aspx',
+         data:{
+           values: {
+               type:'GetNoticeList',
+               seltype: 'all',
+               UserId:userid,
+               other:'',
+               skip:skip,
+               selname:selname,
+               seldate:seldate
+             }
+         },
+            timeout: 10,
+            dataType: 'json',
+            method: 'post'
+    }, function(ret, err) {
+      //api.hideProgress();
+      if(ret.result)
+      {
+        var html="";
+        var disdata = $.parseJSON(ret.data);
+        for (var i = 0; i < disdata.length; i++) {
+            if (disdata[i].type == "notice") {
+                html+='<div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openNoticeDetailWin('+ disdata[i].Id +');">'+
+                  '<i class="icon iconfont icn-notice" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">'+  disdata[i].title +'</span><br/>'+
+                  '<span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">' + disdata[i].fabudate + '</span>'+
+                '</div>';
+            }
+            else if (disdata[i].type == "meeting") {
+              html+='<div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openMeetDetailWin('+ disdata[i].Id +');">'+
+                '<i class="icon iconfont icn-huiyi3" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">'+  disdata[i].title +'</span><br/>'+
+                '<span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">' + disdata[i].fabudate + '</span>'+
+              '</div>';
+            }
+            else if (disdata[i].type == "task") {
+              html+='<div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick=OPenTaskDetailWin('+ disdata[i].Id +',"'+ disdata[i].TaskState +'");>'+
+                '<i class="icon iconfont icn-renwu1" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">'+  disdata[i].title +'</span><br/>'+
+                '<span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">' + disdata[i].fabudate + '</span>'+
+              '</div>';
+            }
+            else if (disdata[i].type == "richeng") {
+              if(disdata[i].TaskType=="任务")
+              {
+                   html += '  <div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openScheduleDetailWin(' + disdata[i].Id + ')">'+
+                       '<i class="icon iconfont icn-tixing1" style="font-size:0.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: .33rem;">' + disdata[i].title + '</span><br/>'+
+                       '<span style="margin:.33rem 0rem 0rem .8rem;display:inline-block;color:#bfbfbf;font-size: .3rem;">' + disdata[i].fabudate + '</span>'+
+                     '</div>';
+               }
+               else {
+                 html += '  <div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="OPenRemindDetailWin(' + disdata[i].Id + ')">'+
+                     '<i class="icon iconfont icn-tixing1" style="font-size:0.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: .33rem;">' + disdata[i].title + '</span><br/>'+
+                     '<span style="margin:.33rem 0rem 0rem .8rem;display:inline-block;color:#bfbfbf;font-size: .3rem;">' + disdata[i].fabudate + '</span>'+
+                   '</div>';
+               }
+
+            }
+
+        }
+     $api.html($api.byId('all'),html);
+         }
+
+         });
+      }
+
+
+      function loadrcdata(selname,seldate) {
+        // 加载loading
+
+        api.showProgress({
+        title:"获取数据中...",
+        text: '请稍等...'
+          });
+       api.ajax({
+            url: ServerConfig.web + '/InformApi.aspx',
+           data:{
+             values: {
+                 type:'GetNoticeList',
+                 seltype: '日程',
+                   UserId:userid,
+                   other:'',
+                   skip:skip,
+                   selname:selname,
+                   seldate:seldate
+                 }
+             },
+                timeout: 10,
+                dataType: 'json',
+                method: 'post'
+        }, function(ret, err) {
+    api.hideProgress();
+          if(ret.result)
+          {
+            var html="";
+            var disdata = $.parseJSON(ret.data);
+            for (var i = 0; i < disdata.length; i++) {
+               if(disdata[i].TaskType=="任务")
+               {
+                    html += '  <div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openScheduleDetailWin(' + disdata[i].Id + ')">'+
+                        '<i class="icon iconfont icn-tixing1" style="font-size:0.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: .33rem;">' + disdata[i].Title + '</span><br/>'+
+                        '<span style="margin:.33rem 0rem 0rem .8rem;display:inline-block;color:#bfbfbf;font-size: .3rem;">' + disdata[i].fabudate + '</span>'+
+                      '</div>';
+                }
+                else {
+                  html += '  <div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="OPenRemindDetailWin(' + disdata[i].Id + ')">'+
+                      '<i class="icon iconfont icn-tixing1" style="font-size:0.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: .33rem;">' + disdata[i].Title + '</span><br/>'+
+                      '<span style="margin:.33rem 0rem 0rem .8rem;display:inline-block;color:#bfbfbf;font-size: .3rem;">' + disdata[i].fabudate + '</span>'+
+                    '</div>';
+                }
+              }
+$api.html($api.byId('richeng'),html);
+             }
+
+             });
+          }
+
+
+          function loadrwdata(other,selname,seldate) {
+            // 加载loading
+            $('#TaskShowSheet').html('待完成 <i style="font-size: .26rem;" class="icon-type"></i>');
+            api.showProgress({
+            title:"获取数据中...",
+            text: '请稍等...'
+              });
+        api.ajax({
+          url: ServerConfig.web + '/InformApi.aspx',
+        data:{
+         values: {
+             type:'GetNoticeList',
+             seltype: '任务',
+             UserId:userid,
+             other:other,
+             skip:skip,
+             selname:selname,
+             seldate:seldate
+           }
+        },
+          timeout: 10,
+          dataType: 'json',
+          method: 'post'
+        }, function(ret, err) {
+        api.hideProgress();
+
+        if(ret.result)
+        {
+        var html="";
+        var disdata = $.parseJSON(ret.data);
+      for (var i = 0; i < disdata.length; i++) {
+            if (other == 'nofinished') {
+              html+='<div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick=OPenTaskDetailWin('+ disdata[i].Id +',"'+ disdata[i].TaskState +'");>'+
+                  '<i class="icon iconfont icn-renwu1" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">'+  disdata[i].title +'</span><br/>'+
+                  '<span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">' + disdata[i].fabudate + '</span>'+
+                '</div>';
+            }
+            else if (other == 'finished') {
+              html+='<div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick=OPenTaskDetailWin('+ disdata[i].Id +',"'+ disdata[i].TaskState +'");>'+
+                  '<i class="icon iconfont icn-renwu1" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">'+  disdata[i].title +'</span><br/>'+
+                  '<span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">' + disdata[i].fabudate + '</span>'+
+                '</div>';
+            }
+
+          }
+        $api.html($api.byId('renwu'),html);
+        }
+
+        });
+        }
+
+
+        function loadhydata(other,selname,seldate) {
+            $('#MeetingShowSheet').html('全部 <i style="font-size: .26rem;" class="icon-type"></i>');
+          // 加载loading
+          var html="";
+          api.showProgress({
+          title:"获取数据中...",
+          text: '请稍等...'
+            });
+api.ajax({
+      url: ServerConfig.web + '/InformApi.aspx',
+   data:{
+     values: {
+         type:'GetNoticeList',
+         seltype: '会议',
+         UserId:userid,
+         other:other,
+         skip:skip,
+         selname:selname,
+         seldate:seldate
+       }
+   },
+      timeout: 10,
+      dataType: 'json',
+      method: 'post'
+}, function(ret, err) {
+api.hideProgress();
+if(ret.result)
+{
+
+  var disdata = $.parseJSON(ret.data);
+  for (var i = 0; i < disdata.length; i++) {
+    html+='<div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openMeetDetailWin('+ disdata[i].Id +');">'+
+      '<i class="icon iconfont icn-huiyi3" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">'+  disdata[i].Title +'</span><br/>'+
+      '<span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">' + disdata[i].fabudate + '</span>'+
+    '</div>';
+      }
+   }
+    $api.html($api.byId('huiyi'),html);
+   });
+
+}
+
+
+function loadggdata(selname,seldate) {
+  // 加载loading
+  var html="";
+  api.showProgress({
+  title:"获取数据中...",
+  text: '请稍等...'
+    });
+api.ajax({
+  url: ServerConfig.web + '/InformApi.aspx',
+data:{
+values: {
+   type:'GetNoticeList',
+   seltype: '公告',
+   UserId:userid,
+    other:'',
+    skip:skip,
+    selname:selname,
+    seldate:seldate
+ }
+},
+timeout: 10,
+dataType: 'json',
+method: 'post'
+}, function(ret, err) {
+api.hideProgress();
+if(ret.result)
+{
+var disdata = $.parseJSON(ret.data);
+for (var i = 0; i < disdata.length; i++) {
+  html+='<div style="background: #fff;padding: .32rem .34rem;margin-bottom:.2rem;" onclick="openNoticeDetailWin('+ disdata[i].Id +');">'+
+    '<i class="icon iconfont icn-notice" style="font-size:.5rem;"></i><span style="margin-left:.3rem;color:#101010;font-size: 0.33rem;">'+  disdata[i].Title +'</span><br/>'+
+    '<span style="margin:0.33rem 0rem 0rem 0.8rem;display:inline-block;color:#bfbfbf;font-size: 0.3rem;">' + disdata[i].fabudate + '</span>'+
+  '</div>';
+}
+
+}
+$api.html($api.byId('gonggao'),html);
+});
+
+}
+
+
+function display()
+{
+  var selname = $("#selname").val();
+  var seldate=$("#seldate").val();
+loadalldata(selname,seldate);
+loadrcdata(selname,seldate);
+loadrwdata('nofinished',selname,seldate);
+loadhydata('',selname,seldate);
+loadggdata(selname,seldate);
+}
+
+function test()
+{
+//  alert(124);
+//  $api.byId('seldate').onclick();
+  //document.getElementById('seldate').click()
+  $("#seldate").focus();
+  // $('#seldate').on('click', function () {
+  //    alert(34)
+   //})
+}
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>我的</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+    <style type="text/css">
+        .aui-grid [class*=aui-col-] {
+            padding: 0.75rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部 -->
+    <section class="aui-content" id="user-info">
+        <div class="aui-list aui-media-list aui-list-noborder aui-bg-info" style='background-color:#f2f2f2 !important;'>
+            <div class="aui-list-item aui-list-item-middle">
+                <div class="aui-media-list-item-inner ">
+                    <div class="aui-list-item-media" style="width:3rem;">
+                        <img src="../icon/demo1.png" class="aui-img-round">
+                    </div>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        <div class="aui-list-item-text text-white aui-font-size-18">Wayne</div>
+                        <div class="aui-list-item-text text-white aui-font-size-12">开发工程师</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="aui-content aui-grid aui-margin-b-15">
+        <div class="aui-row">
+            <div class="aui-col-xs-4 aui-border-r">
+                <big class="aui-text-primary">5.0<small> 天</small></big>
+                <div class="aui-gird-lable aui-font-size-12">年假</div>
+            </div>
+            <div class="aui-col-xs-4 aui-border-r">
+                <big class="aui-text-info">5.5<small> 天</small></big>
+                <div class="aui-gird-lable aui-font-size-12">待调休</div>
+            </div>
+            <div class="aui-col-xs-4">
+                <big class="aui-text-success">2<small> 份</small></big>
+                <div class="aui-gird-lable aui-font-size-12">加班餐券</div>
+            </div>
+        </div>
+    </section>
+    <section class="aui-content">
+
+        <ul class="aui-list aui-list-in">
+            <li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="aui-iconfont aui-icon-menu aui-text-info"></i>
+                </div>
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    <div class="aui-list-item-title">部门</div>
+                    <div class="aui-list-item-right">互联网事业部</div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="aui-iconfont aui-icon-phone aui-text-info"></i>
+                </div>
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    <div class="aui-list-item-title">手机</div>
+                    <div class="aui-list-item-right">13900139000</div>
+                </div>
+            </li>
+
+            <li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="aui-iconfont aui-icon-mail aui-text-info"></i>
+                </div>
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    <div class="aui-list-item-title">邮箱</div>
+                    <div class="aui-list-item-right">summer@163.com</div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="aui-iconfont aui-icon-wechat aui-text-info"></i>
+                </div>
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    <div class="aui-list-item-title">微信</div>
+                    <div class="aui-list-item-right">summer0101</div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-label-icon">
+                    <i class="aui-iconfont aui-icon-qq aui-text-info"></i>
+                </div>
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    <div class="aui-list-item-title">QQ</div>
+                    <div class="aui-list-item-right">58584321</div>
+                </div>
+            </li>
+
+        </ul>
+    </section>
+    <section class="aui-content-padded">
+        <div class="aui-btn aui-btn-block aui-btn-warning aui-btn-sm">注销</div>
+    </section>
+</body>
+<script type="text/javascript" src="../script/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    var dialogBox;
+    apiready = function() {
+        dialogBox = api.require('dialogBox');
+        $('.aui-btn').click(function() {
+          dialogBox.alert({
+              texts: {
+                  title: '提示',
+                  content: '确定要注销退出吗? >>',
+                  leftBtnTitle: '取消',
+                  rightBtnTitle: '确认'
+              },
+              tapClose:true,
+              styles: {
+                  bg: '#fff',
+                  w: 300,
+                  corner: 2,
+                  title: {
+                      marginT: 20,
+                      icon: 'widget://image/error.png',
+                      iconSize: 40,
+                      titleSize: 14,
+                      titleColor: '#000'
+                  },
+                  content: {
+                      color: '#000',
+                      size: 14
+                  },
+                  left: {
+                      marginB: 7,
+                      marginL: 20,
+                      w: 130,
+                      h: 35,
+                      corner: 2,
+                      bg: '#f2f2f2',
+                      size: 12
+                  },
+                  right: {
+                      marginB: 7,
+                      marginL: 10,
+                      w: 130,
+                      h: 35,
+                      corner: 2,
+                      bg: '#f2f2f2',
+                      size: 12
+                  }
+              }
+          }, function(ret) {
+              if (ret.eventType == 'left') {
+                  dialogBox.close({
+                      dialogName: 'alert'
+                  });
+              }else{
+                  dialogBox.close({
+                      dialogName: 'alert'
+                  });
+                  api.toast({　　　　　　
+                      msg: '注销成功',
+                      　　　　　　duration: '1200',
+                      　　　　　　localtion: 'middle'　　　　　　
+                  });
+                  api.closeWin({
+                      name: 'app'
+                  });
+                  $api.setStorage('UserId', '');
+                  api.openWin({　　　　
+                      name: 'app',
+                      　　　　url: 'login.html',
+                      reload: true,
+                      　　　　bounces: false,
+                      slidBackEnabled: false,
+                      　　　　animation: {　　　　
+                          type: "push",
+                          　　　　duration: 300　　　　
+                      }　　　　
+                  });
+
+              }
+          });
+
+        });
+    }
+
+    function logout() {
+
+    }
+</script>
+
+</html>

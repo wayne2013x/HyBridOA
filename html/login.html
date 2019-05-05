@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+</head>
+
+<body>
+    <header class="aui-bar aui-bar-nav" id="aui-header">
+        <a class="aui-btn aui-pull-left" tapmode>
+            <!-- <span class="aui-iconfont aui-icon-left"></span> -->
+        </a>
+        <div class="aui-title">HyBirdOA</div>
+    </header>
+    <section class="aui-content aui-margin-t-15">
+        <ul class="aui-list aui-form-list">
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label aui-border-r color-orange">
+                        登录账号
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="text" required value='admin' placeholder="请输入登录账号" id="username">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label aui-border-r color-orange">
+                        登录密码
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="password" required value='123456' placeholder="请输入登录密码" id="userpwd">
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </section>
+    <section class="aui-content-padded">
+        <div class="aui-btn aui-btn-block aui-btn-info aui-btn-sm" tapmode>登录</div>
+    </section>
+</body>
+<script type="text/javascript" src="../script/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.parseTapmode();
+        var header = $api.byId('aui-header');
+        $api.fixStatusBar(header);
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            api.closeWidget({
+                silent: true
+            });
+        });
+        api.addEventListener({
+            name: 'offline'
+        }, function(ret, err) {
+            alert('断网了');
+        });
+        $('.aui-btn').click(function() {
+            var username = $("#username").val();
+            var userpwd = $('#userpwd').val();
+            if (!$api.trim(username)) {
+                api.toast({
+                    msg: '请输入账号',
+                    duration: 1000,
+                    location: 'middle'
+                });
+                return;
+            }
+            if (!$api.trim(userpwd)) {
+                api.toast({
+                    msg: '请输入密码',
+                    duration: 1000,
+                    location: 'middle'
+                });
+                return;
+            }
+            /*** 加载动画 ***/
+            api.showProgress({
+                title: ' ',
+                text: '登录中...',
+                modal: true
+            });
+            api.ajax({
+                    url: ServerConfig.url + '/account/login?account=' + username + '&pwd=' + userpwd,
+                    timeout: 10,
+                    dataType: 'json',
+                    method: 'get'
+                }, function(ret, err) {
+                    api.hideProgress();
+                    if (ret.result == false) {
+                        api.toast({　　
+                            msg: ret.msg,
+                            　　duration: 1000,
+                            　　location: 'middle'　　　
+                        });　　　　
+                    } else {
+                        var disdata = $.parseJSON(ret.data);
+                        if (disdata.UserName) $api.setStorage('UserName', disdata.UserName);
+                        if (disdata.Id) $api.setStorage('UserId', disdata.Id);
+                        if (disdata.UserRealName) $api.setStorage('UserRealName', disdata.UserRealName);
+                        if (disdata.UserUnit) $api.setStorage('UserUnit', disdata.UserUnit);
+                        if (disdata.UserUnitName) $api.setStorage('UserUnitName', disdata.UserUnitName);
+                        if (disdata.UserDept) $api.setStorage('UserDept', disdata.UserDept);
+                        if (disdata.UserDeptName) $api.setStorage('UserDeptName', disdata.UserDeptName);
+                        if (disdata.Portrait) $api.setStorage('tx', disdata.Portrait);
+                        api.toast({　　　　　　
+                            msg: '登录成功',
+                            　　　　　　duration: '1200',
+                            　　　　　　localtion: 'middle'　　　　　　
+                        });
+                        api.closeWin({
+                            name: 'app'
+                        });
+
+                        api.openWin({　　　　
+                            name: 'app',
+                            　　　　url: 'home.html',
+                            reload: true,
+                            　　　　bounces: false,
+                            slidBackEnabled: false,
+                            　　　　animation: {　　　　
+                                type: "push",
+                                　　　　duration: 300　　　　
+                            }　　　　
+                        });
+                    }
+                    });
+        });
+    };
+</script>
+
+</html>

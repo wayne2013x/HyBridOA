@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- 页面字符编码 -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>应用首页</title>
+	<link rel="stylesheet" type="text/css" href="../css/ydui.css" />
+	<link href="../css/jm_css/dbui.css" rel="stylesheet" />
+	<link href="../css/jm_css/common.css" rel="stylesheet" />
+	<link href="../css/jm_css/mui.min.css" rel="stylesheet" />
+	<link href="../css/font_icon/iconfont.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<script type="text/javascript" src="../script/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="../script/ydui.js"></script>
+	<script type="text/javascript" src="../script/ydui.flexible.js"></script>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript">
+		var userid = "";
+		apiready = function() {
+			userid = $api.getStorage('UserId');
+			//alert(userid);
+			//loadnoticedata();
+			loadtaskdata();
+			loadapplydata();
+			api.addEventListener({
+				name: 'addtaskevent'
+			}, function(ret) {
+				if (ret && ret.value) {
+					loadtaskdata();
+				}
+			});
+			api.setCustomRefreshHeaderInfo({
+				bgColor: '#ffffff',
+				image: {
+					pull: ['widget://image/1.png', 'widget://image/2.png', 'widget://image/3.png', 'widget://image/4.png', 'widget://image/5.png', 'widget://image/6.png', 'widget://image/7.png', 'widget://image/8.png'],
+					load: ['widget://image/8.png', 'widget://image/7.png', 'widget://image/6.png', 'widget://image/5.png', 'widget://image/4.png', 'widget://image/3.png', 'widget://image/2.png', 'widget://image/1.png']
+				}
+			}, function() {
+				skip = 1;
+				setTimeout(function() {
+					loadtaskdata();
+					loadapplydata();
+					api.refreshHeaderLoadDone();
+				}, 1000)
+			});
+		};
+
+		function loadnoticedata() {
+			var html = "";
+			api.ajax({
+				url: ServerConfig.web + '/NoticeApi.aspx',
+				data: {
+					values: {
+						type: 'GetNewestNotice',
+						UserId: userid
+					}
+				},
+				timeout: 10,
+				dataType: 'json',
+				method: 'post'
+			}, function(ret, err) {
+				if (ret.result) {
+					var disdata = $.parseJSON(ret.data);
+					if (disdata.length > 0) {
+						html += '<a href="javascript:;" class="list-item" onclick=fnopennoticedetail(' + disdata[0].Id + '")>' +
+							'<div class="list-mes">' +
+							'<h3 class="list-title">' + disdata[0].Title + '</h3>' +
+							'<div class="list-mes-item">' +
+							'<div class="list-detail">' +
+							'	<span>详情:' + disdata[0].NoticeContent + '</span>' + //' 申请时间:'+disdata[i].CreateDate
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							'</a>';
+					}
+					$('#richengdetail').html(html);
+				}
+
+			});
+		}
+
+		function loadapplydata() {
+			var html = "";
+			api.ajax({
+				url: ServerConfig.web + '/ApplyApi.aspx',
+				data: {
+					values: {
+						type: 'GetApplyListDefault',
+						UserId: userid,
+						skip: 1
+					}
+				},
+				timeout: 10,
+				dataType: 'json',
+				method: 'post'
+			}, function(ret, err) {
+				if (ret.result) {
+					var disdata = $.parseJSON(ret.data);
+					for (var i = 0; i < disdata.length; i++) {
+						html += '<a href="javascript:;" class="list-item" onclick=fnOpenApplydetail(' + disdata[i].Id + ',"' + disdata[i].ApplyType + '")>' +
+							'<div class="list-mes">' +
+							'<h3 class="list-title">' + disdata[i].ApplyType + '申请:' + disdata[i].Reason.toString() + '</h3>' +
+							'<div class="list-mes-item">' +
+							'<div class="list-detail">' +
+							'	<span>审核结果：</span>' +'<span style="color:green">'+  disdata[i].StatusVal + '</span>' + //' 申请时间:'+disdata[i].CreateDate
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							'</a>';
+					}
+					$('#applydetail').html(html);
+				} else {
+					$('#applydetail').html('');
+
+				}
+			});
+
+		}
+
+		function loadtaskdata() {
+			var html = "";
+			api.ajax({
+				url: ServerConfig.web + '/InformApi.aspx',
+				data: {
+					values: {
+						type: 'GetNoticeListDefault',
+						seltype: '任务',
+						UserId: 1,
+						other: 'nofinished',
+						skip: 1
+					}
+				},
+				timeout: 10,
+				dataType: 'json',
+				method: 'post'
+			}, function(ret, err) {
+				if (ret.result) {
+					var disdata = $.parseJSON(ret.data);
+					for (var i = 0; i < disdata.length; i++) {
+						html += '<a href="javascript:;" class="list-item" onclick=fnopentaskdetail("' + disdata[i].Id + '")>' +
+							'<div class="list-mes">' +
+							'<h3 class="list-title">' + disdata[i].title.toString() + '</h3>' +
+							'<div class="list-mes-item">' +
+							'<div class="list-detail">' +
+							'<span >时间：' + disdata[0].fabudate + '	</span><br/><span>紧急程度：</span><span style="color:red">' + disdata[0].Urgent + '</span>' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							'</a>';
+					}
+				}
+				$('#taskdetail').html(html);
+			});
+		}
+
+		function fnOpenBeatWin() {
+			api.parseTapmode();
+			var header = $api.byId('aui-header');
+			var headerPos = $api.offset(header);
+			var footer = $api.byId('aui-footer');
+			var footerPos = $api.offset(footer);
+			api.openWin({
+				name: 'beat',
+				url: 'beat/beat.html',
+				bounces: false
+
+			});
+		}
+
+		function fnOpenApplyWin() {
+			api.closeWin({
+				name: 'apply'
+			});
+			api.openWin({
+				name: 'apply',
+				url: 'apply/applylistwin.html',
+				bounces: false
+
+			});
+		}
+
+		function fnOpenApprovalWin() {
+			api.openWin({
+				name: 'approval',
+				url: 'approval/list.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenTaskWin() {
+			api.openWin({
+				name: 'task',
+				url: 'task/listwin.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenCertificateWin() {
+			api.openWin({
+				name: 'certificatelistwin',
+				url: 'certificates/list.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenMeetWin() {
+			api.openWin({
+				name: 'meet',
+				url: 'meeting/add.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenNoticeWin() {
+			api.openWin({
+				name: 'addnotice',
+				url: 'notice/add.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenFileWin() {
+			api.openWin({
+				name: 'filetype',
+				url: 'file/list.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenClientWin() {
+			api.openWin({
+				name: 'clientwin',
+				url: 'client/clientlistwin.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenFixedWin() {
+			api.openWin({
+				name: 'fixed',
+				url: 'fixedAssets/fixedlistwin.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenTrainWin() {
+			api.openWin({
+				name: 'traincard',
+				url: 'traincard/listwin.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenBeatRecordWin() {
+			api.openWin({
+				name: 'beatrecord',
+				url: 'beatrecord/beatlist.html',
+				bounces: false,
+				rect: {
+					x: 0,
+					y: 0,
+					w: 'auto',
+					h: 'auto'
+				}
+			});
+		}
+
+		function fnOpenAttendanceWin() {
+			api.openWin({
+				name: 'attendance',
+				url: 'attendance/new_detailwin.html',
+				bounces: false,
+				rect: {
+					x: 0,
+					y: 0,
+					w: 'auto',
+					h: 'auto'
+				},
+				pageParam: {
+					userid: $api.getStorage('UserId')
+				}
+			});
+		}
+
+		function fnOpenInterviewWin() {
+			api.openWin({
+				name: 'interviewlistwin',
+				url: 'interview/listwin.html',
+				bounces: false
+			});
+		}
+
+		function fnOpenAbnormalWin() {
+			api.openWin({
+				name: 'abnormal',
+				url: 'abnormal/indexwin.html',
+				bounces: false
+			});
+		}
+
+		function fnopennoticedetail(id) {
+			api.openWin({
+				name: 'noticedetail',
+				url: 'notice/detail.html',
+				pageParam: {
+					selid: id
+				}
+			});
+		}
+
+		function fnopentaskdetail(id) {
+			api.openWin({
+				name: 'taskdetail',
+				url: 'task/detail.html',
+				pageParam: {
+					taskid: id,
+					userid: userid
+				}
+			});
+		}
+
+		function fnOpenApplydetail(id, seltype) {
+			api.openWin({
+				name: 'applyDetailWin',
+				url: 'apply/applyDetailWin.html',
+				pageParam: {
+					selid: id,
+					seltype: seltype
+				}
+			});
+		}
+	</script>
+	<style>
+		.mui-table-view:after {
+			height: 0px;
+		}
+
+		.db_title {
+			font-weight: 800;
+			font-weight: bold;
+			color: black;
+			border-bottom: 1px solid #e6e6e6;
+			margin-bottom: 0.5vh;
+			padding: 10px 5px 6px 10px
+		}
+
+		<style>.icon {
+			width: 1em;
+			height: 1em;
+			vertical-align: -0.15em;
+			fill: currentColor;
+			overflow: hidden;
+		}
+	</style>
+	</style>
+</head>
+
+<body>
+	<ul>
+		<li class="db_bt_none">
+			<p class='db_title' style="border-bottom: 0">所有应用</p>
+			<div class="m-grids-4">
+				<a href="#" onclick="fnOpenApplyWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/write.png"></div>
+					<div class="grids-txt"><span>申请</span></div>
+				</a>
+				<a href="#" onclick="fnOpenApprovalWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/list.png"></div>
+					<div class="grids-txt"><span>审批</span></div>
+				</a>
+				<a href="#" onclick="fnOpenBeatWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/kaoqing.png"></div>
+					<div class="grids-txt"><span>考勤签到</span></div>
+				</a>
+				<a href="#" onclick="fnOpenAttendanceWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/record.png"></div>
+					<div class="grids-txt"><span>我的考勤</span></div>
+				</a>
+			</div>
+			<div class="m-grids-4">
+				<a href="#" onclick="fnOpenTaskWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/todo1.png"></div>
+					<div class="grids-txt"><span>任务</span></div>
+				</a>
+				<a href="#" onclick="fnOpenTrainWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/peixun.png"></div>
+					<div class="grids-txt"><span>培训</span></div>
+				</a>
+				<a href="#" onclick="fnOpenMeetWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/project.png"></div>
+					<div class="grids-txt"><span>会议</span></div>
+				</a>
+				<a href="#" onclick="fnOpenNoticeWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/light.png"></div>
+					<div class="grids-txt"><span>公告</span></div>
+				</a>
+			</div>
+			<div class="m-grids-4">
+				<a href="#" onclick="fnOpenFixedWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/xinzhen.png"></div>
+					<div class="grids-txt"><span>资产</span></div>
+				</a>
+				<a href="#" onclick="fnOpenCertificateWin()" class="grids-item">
+					<div class="grids-icon"><img src="../icon/user.png"></div>
+					<div class="grids-txt"><span>证件夹</span></div>
+				</a>
+
+			</div>
+			</p>
+		</li>
+		<hr style="background:#F5F5F5;width:100%;height:1.3vh;border-radius: 3px;">
+		<li class="db_bt_none">
+			<p class='db_title' style="border-bottom: 0">申请列表</p>
+			<div class="tab-panel-item tab-active" style="padding:0;">
+				<article id="applydetail" class="m-list list-theme4">
+				</article>
+			</div>
+		</li>
+		<hr style="background:#F5F5F5;width:100%;height:1.3vh;border-radius: 3px;">
+		<li class="db_bt_none">
+			<p class='db_title' style="border-bottom: 0">任务列表</p>
+			<div class="tab-panel-item tab-active" style="padding:0;">
+				<article id="taskdetail" class="m-list list-theme4">
+				</article>
+			</div>
+		</li>
+		<!-- <hr style="background:#F5F5F5;width:100%;height:1.3vh;border-radius: 3px;">
+		<li class="db_bt_none">
+			<p class='db_title' style="border-bottom: 0">日程列表</p>
+			<div  class="tab-panel-item tab-active" style="padding:0;">
+				<article id="richengdetail" class="m-list list-theme4">
+        </article>
+			</div>
+		</li> -->
+	</ul>
+</body>
+
+</html>
